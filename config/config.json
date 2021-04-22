@@ -1,0 +1,12 @@
+{
+  "logger": {
+    "level": "debug"
+  },
+  "mongo": {
+    "username": "username",
+    "password": "password",
+    "host": "host",
+    "port": "port",
+    "database": "database"
+  }
+}

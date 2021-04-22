@@ -116,6 +116,7 @@ dist
 .pnp.*
 
 .DS_Store
+.env
 
 # ---------------
 # Project Specific

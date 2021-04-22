@@ -23,7 +23,8 @@
     "paths": {
       "*": ["node_modules/*"],
       "@src/*": ["src/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@config/*": ["config/*"]
     },
     "typeRoots": [
       "src/*", "node_modules/@types"
