@@ -1,0 +1,42 @@
+{
+  "id": 12345,
+  "state": "in progress",
+  "rounds": [
+    {
+      "state": "completed",
+      "prompt": 72,
+      "winner": "moss",
+      "hands": [
+        {
+          "cards": [2, 84],
+          "player": "moss"
+        },
+        {
+          "cards": [69, 77],
+          "player": "roy"
+        },
+        {
+          "cards": [88, 29],
+          "player": "jen"
+        }
+      ]
+    },
+    {
+      "state": "in progress",
+      "prompt": 81,
+      "winner": "roy",
+      "hands": [
+        {
+          "cards": [22, 63],
+          "player": "moss"
+        },
+        {
+          "cards": [92, 172],
+          "player": "roy"
+          "cards": [29, 73],
+          "player": "jen"
+        }
+      ]
+    }
+  ]
+}

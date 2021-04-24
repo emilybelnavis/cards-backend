@@ -2,18 +2,13 @@ const assert = require("assert");
 import NestedDict from "../../src/utils/NestedDict";
 
 describe("Nested Dictionary Test", () => {
-    let testObject: any = {};
-    NestedDict.assign(testObject, ["first", "second", "third"], "test value");
-    NestedDict.assign(testObject, ["peepee"], "poopoo");
+    let testObject: {[key: string]: any} = {};
+    NestedDict.assign(testObject, ["ha_ha", "peepee"], "poopoo");
     NestedDict.assign(testObject, ["funny_number", "sex_number"], 69);
     NestedDict.assign(testObject, ["funny_number", "weed_number"], 420);
 
-    it("Should return all nested entries + value", () => {
-        assert.equal(testObject.first.second.third, "test value");
-    });
-
     it("should return \"poopoo\"", () => {
-        assert.equal(testObject.peepee, "poopoo");
+        assert.equal(testObject.ha_ha.peepee, "poopoo");
     });
 
     it("should return 69", () => {

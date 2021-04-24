@@ -116,15 +116,15 @@ dist
 .pnp.*
 
 .DS_Store
-.env
+
 
 # ---------------
 # Project Specific
 # ---------------
 
 # config files
-config/config.toml
-config/serviceAccountKey.json
+**/serviceAccountKey.json
+**/config.*
 kubernetes/secrets.yaml
 
 # intellij
