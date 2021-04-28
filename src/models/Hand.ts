@@ -1,7 +1,9 @@
 import { Schema, model } from "mongoose";
+import uuid from "uuid";
 
-const schema = new Schema({
+export const handSchema = new Schema({
     cards: [Number],
     player: String
 });
 
+export const Hand = model("Hand", handSchema);

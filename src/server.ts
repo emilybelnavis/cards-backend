@@ -1,35 +1,59 @@
-import mongoose from "mongoose";
-import cors from "cors";
 import express from "express";
-import http from "http"
-import socketIo from "socket.io";
-import log from "@src/utils/Log";
-import bodyParser from "body-parser";
+import limit from "express-rate-limit";
+import log from "@utils/Log";
+import mongoose from "mongoose";
+import Config from "@utils/Config";
 
 const StatsD = require('hot-shots');
-//const router = require("@src/router")
-const mongoOptions = {}
 
-const app = express();
-
+// set up datadog tracking
 const dogstatsd = new StatsD({
-    errorHandler: (error: Error) => {
-        log.error(`Socket errors caught here: ${error}`);
+    errorHandler: function(err: Error) {
+        log.error(`Socket errors were caught here: ${err}`);
     }
 });
 
-// mongodb connection stuff here
+const mongoOptions = {
+    user: Config.options.mongo.user,
+    pass: Config.options.mongo.pass,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    keepAlive: true,
+    keepAliveInitialDelay: 1000
+};
 
-app.use(bodyParser.json());
-//app.use('/', router);
-const MAX_PLAYERS = 10
-const httpServer = http.createServer(app);
-const io = new socketIo.Server(httpServer);
+const mongoConnectionUri = `mongodb://${Config.options.mongo.host}:${Config.options.mongo.port}/${Config.options.mongo.database}`;
 
-let rooms = {};
+mongoose.connect(mongoConnectionUri, mongoOptions)
+    .then(() => {
+        log.info(`Successfully connected to database!`);
+    })
+    .catch((err) => {
+        log.error(`Error encountered when connecting to database...`);
+        log.error(`${err}`);
+        process.exit(1)
+    });
 
-io.on("connection", function(socket) {
-   // todo: do something when a client connects
+const app = express();
+
+app.use(
+    limit({
+        message: {status: 429, message: "API rate limit reached"},
+        windowMs: 60 * 1000,
+        max: 100
+    })
+);
+
+app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'Origin, X-Forwarded-For, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.set('Cache-control', 'public, max-age=300, stale-if-error=60');
+    log.info(`[Client: ${req.ip}] - ${req.method}:${req.url} ${res.statusCode}`);
+    dogstatsd.increment('page.views');
+    next();
 })
 
-export default httpServer;
+app.set('trust proxy', '127.0.0.1');
+
+export default app;
